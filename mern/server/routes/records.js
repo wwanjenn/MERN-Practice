@@ -8,17 +8,17 @@ const router = express.Router();
 
 router.get("/", async (req, res)=>{
     let collection = await db.collection("records");
-    let results = await collection.find({}).toArray()
-    res.send(results).status(200);
+    let result = await collection.find({}).toArray()
+    res.send(result).status(200);
 }) 
 
-router.get("/id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     let collection = await db.collection("records");
     let query = {_id: new ObjectId(req.params.id)};
-    let result = await collection.findOne({query});
+    let result = await collection.findOne(query);
 
-    if (!results) res.send("Not Found").status(404);
-    else res.send(result).status(200);
+    if (!result) res.send("Not Found").status(404);
+    else res.status(200).send(result);
 })
 
 router.post("/", async (req, res) => {
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
         };
         let collection = await db.collection("records");
         let result = await collection .insertOne(newDocument);
-        res.send(result).status(204);
+        res.status(201).send(result);
     } catch(err) {
         console.error(err);
         res.status(500).send("Error adding Record");    
@@ -49,8 +49,8 @@ router.patch("/:id", async(req, res) =>{
             },
         };
         let collection = await db.collection("records");
-        let results = await collection.updateOne(query, updates);
-        res.send(result).status(200)
+        let result = await collection.updateOne(query, updates);
+        res.status(200).send(result)
     } catch (err) {
         console.error(err)
         res.status(500).send("Error updating record");
@@ -62,10 +62,10 @@ router.delete("/:id", async (req, res) => {
         const query = {
             _id: new ObjectId(req.params.id)
         };
-        const collection = db.collection("records");
+        const collection = await db.collection("records");
         
         let result = await collection.deleteOne(query);
-        res.send(result).status(200);
+        res.status(200).send(result);
     } catch (err) {
         console.error(err)
         res.status(500).send("Error deleting record");

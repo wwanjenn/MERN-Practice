@@ -42,7 +42,7 @@ export default function RecordList() {
         async function getRecords() {
             const response = await fetch('http://localhost:5050/record/');
             if (!response.ok) {
-                const message = "An Error Occured: ${response.statusText}";
+                const message = `An Error Occured: ${response.statusText}`;
                 console.error(message);
                 return;
             }
@@ -55,7 +55,7 @@ export default function RecordList() {
     );
 
     async function deleteRecord(id) {
-        await fetch('https://localhost:5050/record{$id}', {
+        await fetch(`http://localhost:5050/record${id}`, {
             method: "DELETE",
         })
         const newRecords = records.filter((el) => el._id !== id);
