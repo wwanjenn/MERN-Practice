@@ -1,23 +1,29 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+type FormType = {
+  name: string;
+  position: string;
+  level: string;
+};
+
 export default function Record() {
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<FormType>({
         name: "",
         position: "",
         level: "",
     });
     const [isNew, setIsNew] = useState(true);
-    const params = useParams();
+    const params = useParams<{id?: string}>();
     const navigate = useNavigate();
 
     useEffect(()=> {
         async function fetchData() { 
-            const id = params.id?.toString || undefined;
+            const id = params.id;
             if (!id) return;
             setIsNew(false);
             const response = await fetch (
-                `${import.meta.env.VITE_API_URL}/record/${params.id.toString()}`
+                `${import.meta.env.VITE_API_URL}/record/${id}`
             );
             if (!response.ok) {
                 const message = `An Error has occured: ${response.statusText}`;
@@ -36,13 +42,13 @@ export default function Record() {
         return;
     }, [params.id, navigate])
 
-    function updateForm(value) {
+    function updateForm(value: Partial<FormType>) {
         return setForm((prev) => {
             return { ...prev, ...value};
         });
     }
 
-    async function onSubmit(e) {
+    async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const person = {...form};
         try {
