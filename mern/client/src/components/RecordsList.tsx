@@ -1,7 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link} from "react-router-dom";
 
-const Record = (props) => (
+interface EmployeeRecord {
+  _id: string;
+  name: string;
+  position: string;
+  level: string;
+}
+
+interface RecordProps {
+  record: EmployeeRecord;
+  deleteRecord: (id: string) => void;
+}
+
+const Record = (props: RecordProps) => (
     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
     <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
       {props.record.name}
@@ -36,7 +48,7 @@ const Record = (props) => (
 );
 
 export default function RecordList() {
-    const [records, setRecords] = useState([]);
+    const [records, setRecords] = useState<EmployeeRecord[]>([]);
     
     useEffect(() => {
         async function getRecords() {
@@ -46,7 +58,7 @@ export default function RecordList() {
                 console.error(message);
                 return;
             }
-            const records = await response.json()
+            const records: EmployeeRecord[] = await response.json()
             setRecords(records);
         }
         getRecords();
@@ -54,7 +66,7 @@ export default function RecordList() {
         }, [records.length]
     );
 
-    async function deleteRecord(id) {
+    async function deleteRecord(id: string) {
         await fetch(`${import.meta.env.VITE_API_URL}/record/${id}`, {
             method: "DELETE",
         })
