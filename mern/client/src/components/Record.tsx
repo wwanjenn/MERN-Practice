@@ -20,13 +20,13 @@ export default function Record() {
                 `http://localhost:5050/record/${params.id.toString()}`
             );
             if (!response.ok) {
-                const message = "An Error has occured: ${response.statusText}";
+                const message = `An Error has occured: ${response.statusText}`;
                 console.error(message)
                 return;
             }
             const record = await response.json()
             if (!record){
-                console.warn("Record with id ${id} not found.");
+                console.warn(`Record with id ${id} not found.`);
                 navigate("/");
                 return;
             };

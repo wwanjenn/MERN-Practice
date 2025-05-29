@@ -55,7 +55,7 @@ export default function RecordList() {
     );
 
     async function deleteRecord(id) {
-        await fetch(`http://localhost:5050/record${id}`, {
+        await fetch(`http://localhost:5050/record/${id}`, {
             method: "DELETE",
         })
         const newRecords = records.filter((el) => el._id !== id);
@@ -66,7 +66,7 @@ export default function RecordList() {
         return records.map((record) => {
             return (
                 <Record
-                    records = {record}
+                    record = {record}
                     deleteRecord = {() => deleteRecord(record._id)}
                     key = {record._id}
                 />
