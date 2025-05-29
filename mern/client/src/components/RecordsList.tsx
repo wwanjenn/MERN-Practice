@@ -62,9 +62,7 @@ export default function RecordList() {
             setRecords(records);
         }
         getRecords();
-        return;            
-        }, [records.length]
-    );
+      }, []);
 
     async function deleteRecord(id: string) {
         await fetch(`${import.meta.env.VITE_API_URL}/record/${id}`, {
